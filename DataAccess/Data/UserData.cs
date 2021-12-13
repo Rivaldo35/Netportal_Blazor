@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Data
 {
-    public class UserData
+    public class UserData : IUserData
     {
         private readonly ISqlDataAccess _db;
 
@@ -30,11 +30,11 @@ namespace DataAccess.Data
 
             return output.FirstOrDefault();
         }
-        public Task InsertUser(UserModel user) => 
+        public Task InsertUser(UserModel user) =>
             _db.SaveData("dbo.spUser_Insert", new { user.instelling_id, user.voornaam, user.achternaam, user.email }, "np");
 
         public Task UpdateUser(UserModel user) =>
-          _db.SaveData("dbo.spUser_Update", user , "np");
+          _db.SaveData("dbo.spUser_Update", user, "np");
 
     }
 }

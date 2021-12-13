@@ -6,23 +6,18 @@ using System.Data.SqlClient;
 
 namespace DataAccess.DbAccess
 {
-    public class SqlDataAccess : IDisposable, ISqlDataAccess
+    public class SqlDataAccess : ISqlDataAccess
     {
         private readonly IConfiguration _config;
-        private readonly ILogger<SqlDataAccess> _logger;
 
-
-        public SqlDataAccess(IConfiguration config, ILogger<SqlDataAccess> logger)
+        public SqlDataAccess(IConfiguration config)
         {
             _config = config;
-            _logger = logger;
         }
-        public IConfiguration _Configuration { get; }
         public string GetConnectionString(string name)
         {
-            return _Configuration.GetConnectionString(name);
+            return _config.GetConnectionString(name);
         }
-
         public async Task<IEnumerable<T>> LoadData<T, U>(string storedProcedure, U parameters, string connectionsStringName)
         {
             string connectionString = GetConnectionString(connectionsStringName);
@@ -42,67 +37,67 @@ namespace DataAccess.DbAccess
                  commandType: CommandType.StoredProcedure);
 
         }
-        private IDbConnection _connection;
-        private IDbTransaction _transaction;
+        //private IDbConnection _connection;
+        //private IDbTransaction _transaction;
 
-        public void StartTransaction(string connectionsStringName)
-        {
-            string connectionString = GetConnectionString(connectionsStringName);
+        //public void StartTransaction(string connectionsStringName)
+        //{
+        //    string connectionString = GetConnectionString(connectionsStringName);
 
-            _connection = new SqlConnection(connectionString);
-            _connection.Open();
+        //    _connection = new SqlConnection(connectionString);
+        //    _connection.Open();
 
-            _transaction = _connection.BeginTransaction();
+        //    _transaction = _connection.BeginTransaction();
 
-            isClosed = false;
-        }
-        public List<T> LoadDataInTransaction<T, U>(string storedProcedure, U parameters)
-        {
-            List<T> rows = _connection.Query<T>(storedProcedure, parameters,
-                commandType: CommandType.StoredProcedure, transaction: _transaction).ToList();
+        //    isClosed = false;
+        //}
+        //public List<T> LoadDataInTransaction<T, U>(string storedProcedure, U parameters)
+        //{
+        //    List<T> rows = _connection.Query<T>(storedProcedure, parameters,
+        //        commandType: CommandType.StoredProcedure, transaction: _transaction).ToList();
 
-            return rows;
-        }
-        public void SaveDataInTransaction<T>(string storedProcedure, T parameters)
-        {
-            _connection.Execute(storedProcedure, parameters,
-               commandType: CommandType.StoredProcedure, transaction: _transaction);
-        }
-        private bool isClosed = false;
+        //    return rows;
+        //}
+        //public void SaveDataInTransaction<T>(string storedProcedure, T parameters)
+        //{
+        //    _connection.Execute(storedProcedure, parameters,
+        //       commandType: CommandType.StoredProcedure, transaction: _transaction);
+        //}
+        //private bool isClosed = false;
 
-        public void CommitTransaction()
-        {
-            _transaction?.Commit();
-            _connection?.Close();
+        //public void CommitTransaction()
+        //{
+        //    _transaction?.Commit();
+        //    _connection?.Close();
 
-            isClosed = true;
-        }
-        public void RollbackTransaction()
-        {
-            _transaction?.Rollback();
-            _connection?.Close();
+        //    isClosed = true;
+        //}
+        //public void RollbackTransaction()
+        //{
+        //    _transaction?.Rollback();
+        //    _connection?.Close();
 
-            isClosed = true;
+        //    isClosed = true;
 
-        }
+        //}
 
-        public void Dispose()
-        {
-            if (isClosed == false)
-            {
-                try
-                {
-                    CommitTransaction();
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Commit transaction failed in the dispose method");
-                }
+        //public void Dispose()
+        //{
+        //    if (isClosed == false)
+        //    {
+        //        try
+        //        {
+        //            CommitTransaction();
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            _logger.LogError(ex, "Commit transaction failed in the dispose method");
+        //        }
 
-            }
-            _transaction = null;
-            _connection = null;
-        }
+        //    }
+        //    _transaction = null;
+        //    _connection = null;
+        //}
 
         //Open connect/start transaction method
         //Load using the transaction
