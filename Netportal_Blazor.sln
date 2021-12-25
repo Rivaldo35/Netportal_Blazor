@@ -3,11 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netportal_Api", "Netportal_Api\Netportal_Api.csproj", "{4949DFAF-BD64-4ED6-8356-C74440480FBB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Netportal_Api", "Netportal_Api\Netportal_Api.csproj", "{4949DFAF-BD64-4ED6-8356-C74440480FBB}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "NetportalDB", "NetportalDB\NetportalDB.sqlproj", "{569A1A37-9E06-4AC4-993B-9FBDA32E064A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{546C32CF-18D2-4EFA-9E77-27AFD5D3F022}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{546C32CF-18D2-4EFA-9E77-27AFD5D3F022}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{586FCF52-2B52-409B-9092-A32DFDC60F0B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{01609BFD-8548-4BAB-88A4-FFB2C1C7F95F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebApp", "WebApp", "{D1C5315A-478D-471A-90DA-FD3AA40A46BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WasmNetportal", "WasmNetportal\WasmNetportal.csproj", "{F9BDB555-3704-48F8-992D-0BD6D8182FCE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,9 +37,19 @@ Global
 		{546C32CF-18D2-4EFA-9E77-27AFD5D3F022}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{546C32CF-18D2-4EFA-9E77-27AFD5D3F022}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{546C32CF-18D2-4EFA-9E77-27AFD5D3F022}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9BDB555-3704-48F8-992D-0BD6D8182FCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9BDB555-3704-48F8-992D-0BD6D8182FCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9BDB555-3704-48F8-992D-0BD6D8182FCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9BDB555-3704-48F8-992D-0BD6D8182FCE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4949DFAF-BD64-4ED6-8356-C74440480FBB} = {586FCF52-2B52-409B-9092-A32DFDC60F0B}
+		{569A1A37-9E06-4AC4-993B-9FBDA32E064A} = {01609BFD-8548-4BAB-88A4-FFB2C1C7F95F}
+		{546C32CF-18D2-4EFA-9E77-27AFD5D3F022} = {586FCF52-2B52-409B-9092-A32DFDC60F0B}
+		{F9BDB555-3704-48F8-992D-0BD6D8182FCE} = {D1C5315A-478D-471A-90DA-FD3AA40A46BE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C73CFA2C-663A-43EC-9D11-D53A876FE5F9}
