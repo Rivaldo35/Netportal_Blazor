@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{01
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebApp", "WebApp", "{D1C5315A-478D-471A-90DA-FD3AA40A46BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WasmNetportal", "WasmNetportal\WasmNetportal.csproj", "{F9BDB555-3704-48F8-992D-0BD6D8182FCE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WasmNetportal", "WasmNetportal\WasmNetportal.csproj", "{F9BDB555-3704-48F8-992D-0BD6D8182FCE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
