@@ -17,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebApp", "WebApp", "{D1C531
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WasmNetportal", "WasmNetportal\WasmNetportal.csproj", "{F9BDB555-3704-48F8-992D-0BD6D8182FCE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetportalAPI", "NetportalAPI\NetportalAPI.csproj", "{784461D9-6CF9-40CB-AF01-5A479A8B5D1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetportalAPI", "NetportalAPI\NetportalAPI.csproj", "{784461D9-6CF9-40CB-AF01-5A479A8B5D1A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

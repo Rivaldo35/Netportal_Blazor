@@ -1,0 +1,104 @@
+﻿@page "/LogIn"
+@layout _LoginLayout
+@inject IAuthenticationService AuthService
+@inject NavigationManager NavManager
+
+<style>
+    body {
+    font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background-color: #f3f3f4;
+    font-size: 13px;
+    color: #676a6c;
+    overflow-x: hidden;
+}
+</style>
+
+@*@if (showAuthenticationError)
+{
+    <div class="alert alert-danger">
+        <p>@authenticationErrorText</p>
+    </div>
+}*@
+<body class="gray-bg">
+
+    <div class="middle-box text-center loginscreen  animated fadeInDown">
+        <div>
+            <div>
+
+                <h1 class="logo-name">IN+</h1>
+
+            </div>
+            <h3>Welcome to IN+</h3>
+            <p>
+                Perfectly designed and precisely prepared admin theme with over 50 pages with extra new web app views.
+            </p>
+            <p>Login in. To see it in action.</p>
+            <EditForm Model="model" OnValidSubmit="ExecuteLogin" class="">
+@*                <DataAnnotationsValidator />
+                <ValidationSummary />*@
+                <div class="form-row">
+                    <div>
+                        <label for="email" class="sr-only">Email</label>
+                         <InputText id="email" class="form-control" @bind-Value="@model.Email" placeholder="Email Adress" />
+                        <ValidationMessage For="@(() => model.Email)" />
+                    </div>
+                    <div>
+                        <label for="email" class="sr-only">Password</label>
+                         <InputText type="password" id="password" class="form-control" @bind-Value="@model.Password" placeholder="Email Adress" />
+                        <ValidationMessage For="@(() => model.Password)" />
+                    </div>
+                </div>
+                <div class="col-auto">
+                               <button type="submit" class="btn btn-success">Log In</button>
+                </div>
+@*
+                <div class="form-group">
+                    <label for="email" class="col-md-2 col-form-label">Email:</label>
+                    <div class="col-md-10">
+                        <InputText id="email" class="form-control" @bind-Value="@model.Email" />
+                        <ValidationMessage For="@(() => model.Email)" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password" class="col-md-2 col-form-label">Password:</label>
+                    <div class="col-md-10">
+                        <InputText type="password" id="password" class="form-control" @bind-Value="@model.Password" />
+                        <ValidationMessage For="@(() => model.Password)" />
+                    </div>
+                </div>*@
+
+@*                <div class="row">
+                    <div class="col-md-12 text-right">
+                        <button type="submit" class="btn btn-success">Log In</button>
+                    </div>
+                </div>*@
+            </EditForm>
+            <p class="m-t"> <small>Inspinia we app framework base on Bootstrap 3 &copy; 2015</small> </p>
+        </div>
+    </div>
+
+</body>
+
+
+@code {
+    private AuthenticationUserModel model = new();
+
+    //private bool showAuthenticationError = false;
+    //private string authenticationErrorText = "";
+
+    private async Task ExecuteLogin()
+    {
+        //showAuthenticationError = false;
+
+        AuthenticatedUserModel result = await AuthService.Login(model);
+        if (result is not null)
+        {
+            NavManager.NavigateTo("/Index");
+        }
+        else
+        {
+            //authenticationErrorText = "There was an error when trying to log in";
+            //showAuthenticationError = true;
+        }
+    }
+}

@@ -58,6 +58,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("OpenCorsPolicy");
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
