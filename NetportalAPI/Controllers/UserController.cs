@@ -15,7 +15,7 @@ using DataAccess.Data;
 using DataAccess.Models;
 using NetportalAPI.Models;
 
-namespace EPSApi.Controllers
+namespace NetportalAPI.Controllers
 {
     [Route("api/[controller]")]
     [Authorize]
