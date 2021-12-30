@@ -1,16 +1,17 @@
-﻿@page "/LogIn"
+﻿@page "/"
+@page "/LogIn"
 @layout _LoginLayout
 @inject IAuthenticationService AuthService
 @inject NavigationManager NavManager
 
 <style>
     body {
-    font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    background-color: #f3f3f4;
-    font-size: 13px;
-    color: #676a6c;
-    overflow-x: hidden;
-}
+        font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        background-color: #f3f3f4;
+        font-size: 13px;
+        color: #676a6c;
+        overflow-x: hidden;
+    }
 </style>
 
 @if (showAuthenticationError)
@@ -19,65 +20,67 @@
         <p>@authenticationErrorText</p>
     </div>
 }
-<body class="gray-bg">
 
-    <div class="middle-box text-center loginscreen  animated fadeInDown">
-        <div>
-            <div>
+<div class="hold-transition login-page">
+    <div class="login-box">
+        <div class="login-logo">
+           <b>Admin</b>LTE
+        </div>
+        <!-- /.login-logo -->
+        <div class="card">
+            <div class="card-body login-card-body">
+                <p class="login-box-msg">Sign in to start your session</p>
 
-                <h1 class="logo-name">IN+</h1>
-
-            </div>
-            <h3>Welcome to IN+</h3>
-            <p>
-                Perfectly designed and precisely prepared admin theme with over 50 pages with extra new web app views.
-            </p>
-            <p>Login in. To see it in action.</p>
-            <EditForm Model="model" OnValidSubmit="ExecuteLogin" class="">
-@*                <DataAnnotationsValidator />
-                <ValidationSummary />*@
-                <div class="form-row">
-                    <div>
-                        <label for="email" class="sr-only">Email</label>
-                         <InputText id="email" class="form-control" @bind-Value="@model.Email" placeholder="Email Adress" />
-                        <ValidationMessage For="@(() => model.Email)" />
-                    </div>
-                    <div>
-                        <label for="email" class="sr-only">Password</label>
-                         <InputText type="password" id="password" class="form-control" @bind-Value="@model.Password" placeholder="password Adress" />
-                        <ValidationMessage For="@(() => model.Password)" />
-                    </div>
-                </div>
-                <div class="col-auto">
-                               <button type="submit" class="btn btn-success">Log In</button>
-                </div>
-@*
-                <div class="form-group">
-                    <label for="email" class="col-md-2 col-form-label">Email:</label>
-                    <div class="col-md-10">
+                <EditForm Model="model" OnValidSubmit="ExecuteLogin" class="">
+                    <div class="input-group mb-3">
                         <InputText id="email" class="form-control" @bind-Value="@model.Email" />
                         <ValidationMessage For="@(() => model.Email)" />
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-envelope"></span>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="password" class="col-md-2 col-form-label">Password:</label>
-                    <div class="col-md-10">
+                    <div class="input-group mb-3">
                         <InputText type="password" id="password" class="form-control" @bind-Value="@model.Password" />
                         <ValidationMessage For="@(() => model.Password)" />
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
                     </div>
-                </div>*@
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="icheck-primary">
+                                <input type="checkbox" id="remember">
+                                <label for="remember">
+                                    Remember Me
+                                </label>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                </EditForm>
 
-@*                <div class="row">
-                    <div class="col-md-12 text-right">
-                        <button type="submit" class="btn btn-success">Log In</button>
-                    </div>
-                </div>*@
-            </EditForm>
-            <p class="m-t"> <small>Inspinia we app framework base on Bootstrap 3 &copy; 2015</small> </p>
+                <!-- /.social-auth-links -->
+
+                <p class="mb-1">
+                    <a href="forgot-password.html">I forgot my password</a>
+                </p>
+                <p class="mb-0">
+                    <a href="register.html" class="text-center">Register a new membership</a>
+                </p>
+            </div>
+            <!-- /.login-card-body -->
         </div>
     </div>
+</div>
 
-</body>
 
 
 @code {
