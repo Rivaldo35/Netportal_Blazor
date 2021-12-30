@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebApp", "WebApp", "{D1C531
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WasmNetportal", "WasmNetportal\WasmNetportal.csproj", "{F9BDB555-3704-48F8-992D-0BD6D8182FCE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetportalAPI", "NetportalAPI\NetportalAPI.csproj", "{784461D9-6CF9-40CB-AF01-5A479A8B5D1A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{F9BDB555-3704-48F8-992D-0BD6D8182FCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9BDB555-3704-48F8-992D-0BD6D8182FCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9BDB555-3704-48F8-992D-0BD6D8182FCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{784461D9-6CF9-40CB-AF01-5A479A8B5D1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{784461D9-6CF9-40CB-AF01-5A479A8B5D1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{784461D9-6CF9-40CB-AF01-5A479A8B5D1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{784461D9-6CF9-40CB-AF01-5A479A8B5D1A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,6 +56,7 @@ Global
 		{569A1A37-9E06-4AC4-993B-9FBDA32E064A} = {01609BFD-8548-4BAB-88A4-FFB2C1C7F95F}
 		{546C32CF-18D2-4EFA-9E77-27AFD5D3F022} = {586FCF52-2B52-409B-9092-A32DFDC60F0B}
 		{F9BDB555-3704-48F8-992D-0BD6D8182FCE} = {D1C5315A-478D-471A-90DA-FD3AA40A46BE}
+		{784461D9-6CF9-40CB-AF01-5A479A8B5D1A} = {586FCF52-2B52-409B-9092-A32DFDC60F0B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C73CFA2C-663A-43EC-9D11-D53A876FE5F9}

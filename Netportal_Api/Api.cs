@@ -22,11 +22,11 @@
             }
         }
 
-        private static async Task<IResult> GetUser(int id, IUserData data)
+        private static async Task<IResult> GetUser(string id, IUserData data)
         {
             try
             {
-                var result = await data.GetUser(id);
+                var result = await data.GetUserById(id);
                 if (result == null) return Results.NotFound();
                 return Results.Ok(result);
             }

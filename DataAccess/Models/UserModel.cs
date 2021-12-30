@@ -8,7 +8,7 @@ namespace DataAccess.Models
 {
     public class UserModel
     {
-        public int Id { get; set; }
+        public string? Id { get; set; }
         public int instelling_id { get; set; }
         public string? voornaam { get; set; }
         public string? achternaam { get; set; }

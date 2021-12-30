@@ -24,7 +24,7 @@ namespace DataAccess.Data
             return output;
         }
 
-        public async Task<UserModel> GetUser(int id)
+        public async Task<UserModel> GetUserById(string id)
         {
             var output = await _db.LoadData<UserModel, dynamic>("dbo.spUser_Get", new { Id = id }, "np");
 
