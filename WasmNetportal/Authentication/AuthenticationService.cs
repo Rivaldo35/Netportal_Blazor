@@ -41,7 +41,7 @@ namespace WasmNetportal.Authentication
                 new KeyValuePair<string, string>("password", userForAuthentication.Password)
                 });
             string api = _config["apiLocation"] + _config["tokenEndpoint"];
-            var authResult = await _client.PostAsync(api, data);
+            var authResult = await _client.PostAsync("https://localhost:7161/token", data);
             var authContent = await authResult.Content.ReadAsStringAsync();
 
             if (authResult.IsSuccessStatusCode == false)

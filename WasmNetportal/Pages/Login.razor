@@ -13,12 +13,12 @@
 }
 </style>
 
-@*@if (showAuthenticationError)
+@if (showAuthenticationError)
 {
     <div class="alert alert-danger">
         <p>@authenticationErrorText</p>
     </div>
-}*@
+}
 <body class="gray-bg">
 
     <div class="middle-box text-center loginscreen  animated fadeInDown">
@@ -44,7 +44,7 @@
                     </div>
                     <div>
                         <label for="email" class="sr-only">Password</label>
-                         <InputText type="password" id="password" class="form-control" @bind-Value="@model.Password" placeholder="Email Adress" />
+                         <InputText type="password" id="password" class="form-control" @bind-Value="@model.Password" placeholder="password Adress" />
                         <ValidationMessage For="@(() => model.Password)" />
                     </div>
                 </div>
@@ -83,12 +83,12 @@
 @code {
     private AuthenticationUserModel model = new();
 
-    //private bool showAuthenticationError = false;
-    //private string authenticationErrorText = "";
+    private bool showAuthenticationError = false;
+    private string authenticationErrorText = "";
 
     private async Task ExecuteLogin()
     {
-        //showAuthenticationError = false;
+        showAuthenticationError = false;
 
         AuthenticatedUserModel result = await AuthService.Login(model);
         if (result is not null)
@@ -97,8 +97,8 @@
         }
         else
         {
-            //authenticationErrorText = "There was an error when trying to log in";
-            //showAuthenticationError = true;
+            authenticationErrorText = "There was an error when trying to log in";
+            showAuthenticationError = true;
         }
     }
 }
