@@ -117,7 +117,7 @@ namespace EPSApi.Controllers
                     new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MySecretKeyIsSrecretSoDoNotTell")),
                     SecurityAlgorithms.HmacSha256)),
                 new JwtPayload(claims));
-
+            var test = User.Claims.FirstOrDefault(t => t.Type == "UserName")?.Value;
             var output = new
             {
                 Access_Token = new JwtSecurityTokenHandler().WriteToken(token),
