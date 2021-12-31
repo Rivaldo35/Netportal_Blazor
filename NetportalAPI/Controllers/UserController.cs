@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using DataAccess.Data;
 using DataAccess.Models;
 using NetportalAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace NetportalAPI.Controllers
 {
@@ -24,13 +25,15 @@ namespace NetportalAPI.Controllers
     {
 
         private readonly ApplicationDbContext _context;
+        private readonly Netportal_AuthDbContext _authDbContext;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IUserData _userData;
         private readonly ILogger<UserController> _logger;
 
-        public UserController(ApplicationDbContext context, UserManager<IdentityUser> userManager, IUserData userData, ILogger<UserController> logger)
+        public UserController(ApplicationDbContext context, Netportal_AuthDbContext authDbContext, UserManager<IdentityUser> userManager, IUserData userData, ILogger<UserController> logger)
         {
             _context = context;
+            _authDbContext = authDbContext;
             _userManager = userManager;
             _userData = userData;
             _logger = logger;
@@ -58,7 +61,8 @@ namespace NetportalAPI.Controllers
         {
             if (ModelState.IsValid)
             {
-                var existingUser = await _userManager.FindByEmailAsync(user.EmailAdress);
+                var userexisting = await _authDbContext.Users.FirstOrDefaultAsync(x => x.Email.Trim() == user.EmailAdress.Trim());
+                    var existingUser = await _userManager.FindByEmailAsync(user.EmailAdress);
                 if (existingUser == null)
                 {
                     IdentityUser newUser = new()
@@ -81,8 +85,9 @@ namespace NetportalAPI.Controllers
                             Id = exisingUser.Id,
                             voornaam = user.FirstName,
                             achternaam = user.LastName,
+                            email = exisingUser.Email
                         };
-                       await _userData.InsertUser(u);
+                        await _userData.InsertUser(u);
                         return Ok();
                     }
                 }

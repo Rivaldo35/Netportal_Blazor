@@ -18,6 +18,9 @@ builder.Services.AddCors(policy =>
     .AllowAnyHeader()
     .AllowAnyMethod());
 });
+builder.Services.AddDbContext<Netportal_AuthDbContext>(options =>
+    options.UseSqlServer(
+        configuration.GetConnectionString("np")));
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
         configuration.GetConnectionString("DefaultConnection")));
