@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Novell.Directory.Ldap;
+using NetportalAPI.Models;
 
 namespace EPSApi.Controllers
 {
@@ -19,24 +20,28 @@ namespace EPSApi.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly Netportal_AuthDbContext _authDbContext;
+        private readonly IConfiguration _config;
 
-        public TokenController(ApplicationDbContext context, UserManager<IdentityUser> userManager, Netportal_AuthDbContext authDbContext)
+        public TokenController(ApplicationDbContext context, UserManager<IdentityUser> userManager, Netportal_AuthDbContext authDbContext, IConfiguration config)
         {
             _context = context;
             _userManager = userManager;
             _authDbContext = authDbContext;
+            _config = config;
         }
         [Route("/token")]
         [HttpPost]
         public async Task<IActionResult> Create(string username, string password, string grant_type)
         {
+            var claimInfo = ClaimInfo(username, GetAppName());
+
             if (await IsActiveUser(username))
             {
                 if (await IsInternalUser(username))
                 {
                     if (await ValidateAccountAd(username, password))
                     {
-                        return new ObjectResult(await GenerateToken(username));
+                        return new ObjectResult(GenerateToken(claimInfo));
                     }
                     else
                     {
@@ -47,7 +52,7 @@ namespace EPSApi.Controllers
                 {
                     if (await ValidateAccountDb(username, password))
                     {
-                        return new ObjectResult(await GenerateToken(username));
+                        return new ObjectResult(GenerateToken(claimInfo));
                     }
                     else
                     {
@@ -61,25 +66,51 @@ namespace EPSApi.Controllers
             }
 
         }
-
-        private async Task<dynamic> GenerateToken(string username)
+        //public async Task<IActionResult> Create(string username, string password, string grant_type)
+        //{
+        //    if (await IsValidUsernameAndPassword(username, password))
+        //    {
+        //        return new ObjectResult(await GenerateToken(username, ClaimInfo()));
+        //    }
+        //    else
+        //    {
+        //        return BadRequest();
+        //    }
+        //}
+        private dynamic GenerateToken(ClaimInfo claimInfo)
         {
-            var user = await _userManager.FindByEmailAsync(username);
-            var roles = from ur in _context.UserRoles
-                        join r in _context.Roles on ur.RoleId equals r.Id
-                        where ur.UserId == user.Id
-                        select new { ur.UserId, ur.RoleId, r.Name };
+            //var user = await _userManager.FindByEmailAsync(username);
+            //var user_auth = await _userManager.FindByEmailAsync(username);
+            //var roles = from ur in _context.UserRoles
+            //            join r in _context.Roles on ur.RoleId equals r.Id
+            //            where ur.UserId == user.Id
+            //            select new { ur.UserId, ur.RoleId, r.Name };
+
+            //var claims = new List<Claim>
+            //{
+            //new Claim(ClaimTypes.Email, username),
+            //new Claim (ClaimTypes.NameIdentifier, user.Id),
+            //new Claim(JwtRegisteredClaimNames.Nbf, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
+            //new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds().ToString())
+            //};
+            //foreach (var role in roles)
+            //{
+            //    claims.Add(new Claim(ClaimTypes.Role, role.Name));
+            //}
             var claims = new List<Claim>
             {
-            new Claim(ClaimTypes.Email, username),
-            new Claim (ClaimTypes.NameIdentifier, user.Id),
+                new Claim("UserId", claimInfo.UserId.ToString()),
+                new Claim("UserName", claimInfo.Username),
+                new Claim("FullName", claimInfo.Fullname),
+                new Claim("InstellingId", claimInfo.InstellingId.ToString()),
+                new Claim("Instelling", claimInfo.Instelling),
+                new Claim("ApplicatieId", GetAppId().ToString()),
+                new Claim("Applicatie", GetAppName()),
+                new Claim("RolId", claimInfo.RolId.ToString()),
+                new Claim("Rol", claimInfo.Rol),
             new Claim(JwtRegisteredClaimNames.Nbf, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
             new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds().ToString())
             };
-            foreach (var role in roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role.Name));
-            }
             var token = new JwtSecurityToken(
                 new JwtHeader(
 
@@ -90,16 +121,62 @@ namespace EPSApi.Controllers
             var output = new
             {
                 Access_Token = new JwtSecurityTokenHandler().WriteToken(token),
-                UserName = username
+                UserName = claimInfo.Username
             };
 
             return output;
         }
-        private async Task<bool> IsValidUsernameAndPassword(string username, string password)
-        {
+        //private async Task<bool> IsValidUsernameAndPassword(string username, string password)
+        //{
 
-            var user = await _userManager.FindByEmailAsync(username);
-            return await _userManager.CheckPasswordAsync(user, password);
+        //    var user = await _userManager.FindByEmailAsync(username);
+        //    return await _userManager.CheckPasswordAsync(user, password);
+        //}
+        private async void SignInClaims(ClaimInfo claimInfo)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim("UserId", claimInfo.UserId.ToString()),
+                new Claim("UserName", claimInfo.Username),
+                new Claim("FullName", claimInfo.Fullname),
+                new Claim("InstellingId", claimInfo.InstellingId.ToString()),
+                new Claim("Instelling", claimInfo.Instelling),
+                new Claim("ApplicatieId", GetAppId().ToString()),
+                new Claim("Applicatie", GetAppName()),
+                new Claim("RolId", claimInfo.RolId.ToString()),
+                new Claim("Rol", claimInfo.Rol),
+            new Claim(JwtRegisteredClaimNames.Nbf, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
+            new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds().ToString())
+            };
+            //var claimsIdentity = new ClaimsIdentity(
+            //    claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            //var authProperties = new AuthenticationProperties
+            //{
+            //    ExpiresUtc = DateTimeOffset.UtcNow.AddHours(1)
+            //};
+            //HttpContext.SignInAsync(
+            //    CookieAuthenticationDefaults.AuthenticationScheme,
+            //    new ClaimsPrincipal(claimsIdentity),
+            //    authProperties);
+        }
+        private ClaimInfo ClaimInfo(string username, string applicatie)
+        {
+            var claimInfo = (from user in _authDbContext.Users
+                                   join instelling in _authDbContext.Instellings on user.InstellingId equals instelling.InstellingId
+                                   join account in _authDbContext.UserAccounts on user.UserId equals account.UserId
+                                   where user.Username == username && account.Rol.Code.Contains("admin") && account.Status != "Disabled" && account.Applicatie.Code == applicatie
+                                   select new ClaimInfo()
+                                   {
+                                       UserId = user.UserId,
+                                       Username = user.Username,
+                                       Fullname = user.Voornaam + " " + user.Achternaam,
+                                       InstellingId = instelling.InstellingId,
+                                       Instelling = instelling.Naam,
+                                       RolId = account.Rol.RolId,
+                                       Rol = account.Rol.Code
+                                   }).FirstOrDefault();
+            return claimInfo;
         }
         private async Task<bool> IsActiveUser(string username)
         {
@@ -121,7 +198,7 @@ namespace EPSApi.Controllers
 
             try
             {
-               await ldapConn.BindAsync(username + "@cbvs.sr", password);
+                await ldapConn.BindAsync(username + "@cbvs.sr", password);
                 return ldapConn.Bound;
             }
             catch
@@ -141,6 +218,15 @@ namespace EPSApi.Controllers
             }
             return false;
         }
-
+        private string GetAppName()
+        {
+            var app = _config.GetSection("App").Value;
+            return app;
+        }
+        private int? GetAppId()
+        {
+            var appId = _authDbContext.Applicaties.FirstOrDefault(x => x.Code == GetAppName())?.ApplicatieId;
+            return appId;
+        }
     }
 }
