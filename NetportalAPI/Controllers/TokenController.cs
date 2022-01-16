@@ -89,7 +89,8 @@ namespace EPSApi.Controllers
             var output = new
             {
                 Access_Token = new JwtSecurityTokenHandler().WriteToken(token),
-            };
+                UserName = User.Claims.FirstOrDefault(t => t.Type == "UserName")?.Value
+        };
 
             return output;
         }

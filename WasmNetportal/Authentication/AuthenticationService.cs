@@ -18,7 +18,7 @@ namespace WasmNetportal.Authentication
         private readonly AuthenticationStateProvider _authStateProvider;
         private readonly ILocalStorageService _localStorage;
         private readonly IConfiguration _config;
-        private string authTokenStorageKey;
+        private readonly string authTokenStorageKey;
 
         public AuthenticationService(HttpClient client,
                                      AuthenticationStateProvider AuthStateProvider,
@@ -63,9 +63,7 @@ namespace WasmNetportal.Authentication
         }
         public async Task Logout()
         {
-            await _localStorage.RemoveItemAsync(authTokenStorageKey);
-            await ((AuthStateProvider)_authStateProvider).NotifyUserLogout();
-            _client.DefaultRequestHeaders.Authorization = null;
+           await ((AuthStateProvider)_authStateProvider).NotifyUserLogout();
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿CREATE TABLE [dbo].[Instelling] (
     [instelling_id]   INT          IDENTITY (1, 1) NOT NULL,
-    [Swift_code]      VARCHAR (50) NULL,
     [code]            VARCHAR (50) NULL,
+    [Swift_code]      VARCHAR (50) NULL,
     [naam]            VARCHAR (50) NULL,
-    [omschrijving]    TEXT         NULL,
+    [omschrijving]    VARCHAR (50) NULL,
     [adres]           VARCHAR (50) NULL,
     [kkfnr]           VARCHAR (50) NULL,
     [telnr_1]         VARCHAR (50) NULL,

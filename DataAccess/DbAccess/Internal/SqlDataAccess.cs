@@ -23,8 +23,9 @@ namespace DataAccess.DbAccess
             string connectionString = GetConnectionString(connectionsStringName);
             using (IDbConnection cnn = new SqlConnection(connectionString))
             {
-                return await cnn.QueryAsync<T>(storedProcedure, parameters,
+                IEnumerable<T> test = await cnn.QueryAsync<T>(storedProcedure, parameters,
                      commandType: CommandType.StoredProcedure);
+                return test;
             }
         }
 

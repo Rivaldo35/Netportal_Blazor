@@ -1,4 +1,4 @@
-﻿using EPSDesktopUI.Library.Api;
+﻿using Microsoft.Extensions.Configuration;
 using Netportal.Library.Api;
 using Netportal.Library.Models;
 using System;
@@ -10,17 +10,19 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace net.Api
+namespace Netportal.Library.Api
 {
     public class APIHelper : IAPIHelper
     {
         private HttpClient _apiClient;
         private readonly ILoggedInUserModel _loggedInUser;
+        private readonly IConfiguration _config;
 
-        public APIHelper(ILoggedInUserModel loggedInUser)
+        public APIHelper(ILoggedInUserModel loggedInUser, IConfiguration config)
         {
-            InitializeClient();
             _loggedInUser = loggedInUser;
+            _config = config;
+            InitializeClient();
         }
 
         public HttpClient ApiClient
@@ -32,7 +34,7 @@ namespace net.Api
         }
         private void InitializeClient()
         {
-            string api = ConfigurationManager.AppSettings["api"];
+            string api = _config["apiLocation"] + _config["tokenEndpoint"];
             _apiClient = new HttpClient();
             _apiClient.BaseAddress = new Uri(api);
             _apiClient.DefaultRequestHeaders.Accept.Clear();
@@ -49,24 +51,16 @@ namespace net.Api
                 new KeyValuePair<string, string>("password", password)
                 });
 
-            /*using (HttpResponseMessage response = */
-            await _apiClient.PostAsync("/Token", data))
-            //{
-                if (response.IsSuccessStatusCode)
-                {
-                    var results = await response.Content.rea();
-                    var res= new AuthenticatedUser 
-                    { 
-                    Access_Token = results.toke
-                    }
-                    return result;
+            using HttpResponseMessage response = await _apiClient.PostAsync("/Token", data);
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadAsAsync<AuthenticatedUser>();
+                return result;
 
-                }
-                else
-                {
-                    throw new Exception(response.ReasonPhrase);
-                }
-
+            }
+            else
+            {
+                throw new Exception(response.ReasonPhrase);
             }
         }
 
@@ -82,22 +76,21 @@ namespace net.Api
             _apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             _apiClient.DefaultRequestHeaders.Add("Authorization", $"Bearer { token  }");
 
-            using (HttpResponseMessage response = await _apiClient.GetAsync("/api/User"))
+            using HttpResponseMessage response = await _apiClient.GetAsync("/api/User");
+            if (response.IsSuccessStatusCode)
             {
-                if (response.IsSuccessStatusCode)
-                {
-                    var result = await response.Content.ReadAsAsync<LoggedInUserModel>();
-                    _loggedInUser.CreatedDate = result.CreatedDate;
-                    _loggedInUser.EmailAddress = result.EmailAddress;
-                    _loggedInUser.FirstName = result.FirstName;
-                    _loggedInUser.Id = result.Id;
-                    _loggedInUser.LastName = result.LastName;
-                    _loggedInUser.Token = token;
-                }
-                else
-                {
-                    throw new Exception(response.ReasonPhrase);
-                }
+                var result = await response.Content.ReadAsAsync<LoggedInUserModel>();
+                _loggedInUser.pwd_changed_date = result.pwd_changed_date;
+                _loggedInUser.email = result.email;
+                _loggedInUser.voornaam = result.voornaam;
+                _loggedInUser.Id = result.Id;
+                _loggedInUser.achternaam = result.achternaam;
+                _loggedInUser.username = result.username;
+                _loggedInUser.Token = token;
+            }
+            else
+            {
+                throw new Exception(response.ReasonPhrase);
             }
 
         }

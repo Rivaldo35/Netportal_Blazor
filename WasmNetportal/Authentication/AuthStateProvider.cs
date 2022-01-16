@@ -38,6 +38,14 @@ namespace WasmNetportal.Authentication
             {
                 return _anonymous;
             }
+
+            bool isAuthenticated = await NotifyUserAuthentication(token);
+
+            if (isAuthenticated == false)
+            {
+                return _anonymous;
+            }
+
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
             return new AuthenticationState(
                 new ClaimsPrincipal
@@ -45,8 +53,9 @@ namespace WasmNetportal.Authentication
                     JwtParser.ParseClaimsFromJWT(token),
                     "jwtAuthType")));
         }
-        public async Task NotifyUserAuthentication(string token)
+        public async Task<bool> NotifyUserAuthentication(string token)
         {
+            bool isAuthenticatedOutput;
             Task<AuthenticationState> authState;
             try
             {
@@ -55,22 +64,28 @@ namespace WasmNetportal.Authentication
                                        (new ClaimsIdentity(
                                  JwtParser.ParseClaimsFromJWT(token),
                                        "jwtAuthType"));
-                 authState = Task.FromResult(new AuthenticationState(authenticatedUser));
+                authState = Task.FromResult(new AuthenticationState(authenticatedUser));
+                NotifyAuthenticationStateChanged(authState);
+                isAuthenticatedOutput = true;
+
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
-                string authTokenStorageKey = _config["authTokenStorageKey"];
-                await _localStorage.SetItemAsync(authTokenStorageKey, "");
-                authState = Task.FromResult(_anonymous);
+                await NotifyUserLogout();
+                isAuthenticatedOutput = false;
+                // authState = Task.FromResult(_anonymous);
             }
-            NotifyAuthenticationStateChanged(authState);
+            return isAuthenticatedOutput;
         }
 
-        public void NotifyUserLogout()
+        public async Task NotifyUserLogout()
         {
+            string authTokenStorageKey = _config["authTokenStorageKey"];
+            await _localStorage.RemoveItemAsync(authTokenStorageKey);
             var authState = Task.FromResult(_anonymous);
-             _apihelper.LoggOffUser();
+            _apihelper.LoggOffUser();
+            _httpClient.DefaultRequestHeaders.Authorization = null;
             NotifyAuthenticationStateChanged(authState);
         }
     }

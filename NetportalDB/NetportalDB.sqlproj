@@ -6,7 +6,7 @@
     <Name>NetportalDB</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
-    <ProjectGuid>{569a1a37-9e06-4ac4-993b-9fbda32e064a}</ProjectGuid>
+    <ProjectGuid>{d52f976f-1bd0-4108-9342-6b958b53b7ba}</ProjectGuid>
     <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
@@ -16,7 +16,7 @@
     <ModelCollation>1033,CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetLanguage>CS</TargetLanguage>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <SqlServerVerification>False</SqlServerVerification>
@@ -60,27 +60,24 @@
     <Folder Include="Properties" />
     <Folder Include="dbo\" />
     <Folder Include="dbo\Tables\" />
-    <Folder Include="dbo\StoredProcedures" />
+    <Folder Include="Security\" />
+    <Folder Include="Publishlocation\" />
+    <Folder Include="dbo\Stored Procedures" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Applicatie.sql" />
     <Build Include="dbo\Tables\Auditlog.sql" />
+    <Build Include="dbo\Tables\Instelling.sql" />
     <Build Include="dbo\Tables\Instelling_Profile.sql" />
     <Build Include="dbo\Tables\Instelling_Type.sql" />
     <Build Include="dbo\Tables\Reset_Password.sql" />
-    <Build Include="dbo\Tables\User_Rol.sql" />
-    <Build Include="dbo\Tables\User_Account.sql" />
     <Build Include="dbo\Tables\User.sql" />
-    <Build Include="dbo\Tables\Instelling.sql" />
-    <Build Include="dbo\StoredProcedures\spUser_GetAll.sql" />
-    <Build Include="dbo\StoredProcedures\spUser_Get.sql" />
-    <Build Include="dbo\StoredProcedures\spUser_Insert.sql" />
-    <Build Include="dbo\StoredProcedures\spUser_Update.sql" />
+    <Build Include="dbo\Tables\User_Account.sql" />
+    <Build Include="dbo\Tables\User_Rol.sql" />
+    <Build Include="Security\Permissions.sql" />
+    <Build Include="dbo\Stored Procedures\npUser_GetByUsername.sql" />
   </ItemGroup>
   <ItemGroup>
-    <RefactorLog Include="NetportalDB.refactorlog" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="NetportalDB.publish.xml" />
+    <None Include="Publishlocation\NetportalDB.publish.xml" />
   </ItemGroup>
 </Project>

@@ -26,9 +26,9 @@ namespace DataAccess.Data
 
         public async Task<UserModel> GetUserById(string id)
         {
-            var output = await _db.LoadData<UserModel, dynamic>("dbo.spUser_Get", new { Id = id }, "np");
+            var output = await _db.LoadData<UserModel, dynamic>("dbo.npUser_GetByUsername", new { username = id }, "np");
 
-            return output.FirstOrDefault();
+            return output.ToList().FirstOrDefault();
         }
         public Task InsertUser(UserModel user) =>
             _db.SaveData("dbo.spUser_Insert", new { user.instelling_id, user.voornaam, user.achternaam, user.email }, "np");

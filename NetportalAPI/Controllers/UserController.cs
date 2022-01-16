@@ -39,10 +39,11 @@ namespace NetportalAPI.Controllers
             _logger = logger;
         }
         [HttpGet]
-        public string GetById()
+        public UserModel GetById()
         {
-            string test = User.Claims.FirstOrDefault(t => t.Type == "UserName")?.Value.ToString();
-            return test;
+            string UserId = User.Claims.FirstOrDefault(t => t.Type == "UserName")?.Value.ToString();
+            var test = _userData.GetUserById(UserId);
+            return test.Result;
 
         }
 
