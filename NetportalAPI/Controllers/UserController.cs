@@ -39,10 +39,11 @@ namespace NetportalAPI.Controllers
             _logger = logger;
         }
         [HttpGet]
-        public UserModel GetById()
+        public string GetById()
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier); /*RequestContext.Principal.Identity.GetUserId();*/
-            return _userData.GetUserById(userId).Result;
+            string test = User.Claims.FirstOrDefault(t => t.Type == "UserName")?.Value.ToString();
+            return test;
+
         }
 
         public record UserRegistrationModel
@@ -95,9 +96,9 @@ namespace NetportalAPI.Controllers
             return BadRequest();
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpGet]
-        [Route("Admin/GetAllusers")]
+        [Route("GetAllusers")]
         public List<ApplicationUserModel> GetAllUsers()
         {
             List<ApplicationUserModel> output = new List<ApplicationUserModel>();
@@ -122,7 +123,34 @@ namespace NetportalAPI.Controllers
                 output.Add(u);
             }
             return output;
-        }
+        } 
+        //[HttpGet]
+        //[Route("GetAllusers")]
+        //public List<ApplicationUserModel> GetAuthApps()
+        //{
+        //    List<Applicatie> output = new ();
+
+        //    var users = _context.Users.ToList();
+        //    var userRoles = from ur in _context.UserRoles
+        //                    join r in _context.Roles on ur.RoleId equals r.Id
+        //                    select new { ur.UserId, ur.RoleId, r.Name };
+        //    foreach (var user in users)
+        //    {
+        //        ApplicationUserModel u = new ApplicationUserModel
+        //        {
+        //            Id = user.Id,
+        //            Email = user.Email
+        //        };
+
+        //        u.Roles = userRoles.Where(x => x.UserId == u.Id).ToDictionary(x => x.RoleId, x => x.Name);
+        //        //foreach (var r in user.Roles)
+        //        //{
+        //        //    u.Roles.Add(r.RoleId, roles.Where(x => x.Id == r.RoleId).First().Name);
+        //        //}
+        //        output.Add(u);
+        //    }
+        //    return output;
+        //}
         [Authorize(Roles = "Admin")]
         [HttpGet]
         [Route("Admin/GetAllRoles")]

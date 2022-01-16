@@ -31,7 +31,7 @@ else
         if (authState.User.Identity.IsAuthenticated)
         {
             isAuthenticated = true;
-            userName = authState.User.FindFirst(ClaimTypes.Name).Value;
+            userName = authState.User.FindFirst(t => t.Type == "UserName").Value;
             isAdminUser = authState.User.IsInRole("Admin");
             isCashier = authState.User.IsInRole("Cashier");
             isManager = authState.User.IsInRole("Manager");

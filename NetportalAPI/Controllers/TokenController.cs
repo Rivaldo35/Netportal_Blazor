@@ -33,7 +33,7 @@ namespace EPSApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(string username, string password, string grant_type)
         {
-            var claimInfo = ClaimInfo(username, GetAppName());
+            var claimInfo = ClaimInfo(username);
 
             if (await IsActiveUser(username))
             {
@@ -79,24 +79,6 @@ namespace EPSApi.Controllers
         //}
         private dynamic GenerateToken(ClaimInfo claimInfo)
         {
-            //var user = await _userManager.FindByEmailAsync(username);
-            //var user_auth = await _userManager.FindByEmailAsync(username);
-            //var roles = from ur in _context.UserRoles
-            //            join r in _context.Roles on ur.RoleId equals r.Id
-            //            where ur.UserId == user.Id
-            //            select new { ur.UserId, ur.RoleId, r.Name };
-
-            //var claims = new List<Claim>
-            //{
-            //new Claim(ClaimTypes.Email, username),
-            //new Claim (ClaimTypes.NameIdentifier, user.Id),
-            //new Claim(JwtRegisteredClaimNames.Nbf, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
-            //new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds().ToString())
-            //};
-            //foreach (var role in roles)
-            //{
-            //    claims.Add(new Claim(ClaimTypes.Role, role.Name));
-            //}
             var claims = new List<Claim>
             {
                 new Claim("UserId", claimInfo.UserId.ToString()),
@@ -104,10 +86,6 @@ namespace EPSApi.Controllers
                 new Claim("FullName", claimInfo.Fullname),
                 new Claim("InstellingId", claimInfo.InstellingId.ToString()),
                 new Claim("Instelling", claimInfo.Instelling),
-                new Claim("ApplicatieId", GetAppId().ToString()),
-                new Claim("Applicatie", GetAppName()),
-                new Claim("RolId", claimInfo.RolId.ToString()),
-                new Claim("Rol", claimInfo.Rol),
             new Claim(JwtRegisteredClaimNames.Nbf, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
             new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds().ToString())
             };
@@ -121,60 +99,23 @@ namespace EPSApi.Controllers
             var output = new
             {
                 Access_Token = new JwtSecurityTokenHandler().WriteToken(token),
-                UserName = claimInfo.Username
             };
 
             return output;
         }
-        //private async Task<bool> IsValidUsernameAndPassword(string username, string password)
-        //{
 
-        //    var user = await _userManager.FindByEmailAsync(username);
-        //    return await _userManager.CheckPasswordAsync(user, password);
-        //}
-        private async void SignInClaims(ClaimInfo claimInfo)
-        {
-            var claims = new List<Claim>
-            {
-                new Claim("UserId", claimInfo.UserId.ToString()),
-                new Claim("UserName", claimInfo.Username),
-                new Claim("FullName", claimInfo.Fullname),
-                new Claim("InstellingId", claimInfo.InstellingId.ToString()),
-                new Claim("Instelling", claimInfo.Instelling),
-                new Claim("ApplicatieId", GetAppId().ToString()),
-                new Claim("Applicatie", GetAppName()),
-                new Claim("RolId", claimInfo.RolId.ToString()),
-                new Claim("Rol", claimInfo.Rol),
-            new Claim(JwtRegisteredClaimNames.Nbf, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
-            new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds().ToString())
-            };
-            //var claimsIdentity = new ClaimsIdentity(
-            //    claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-            //var authProperties = new AuthenticationProperties
-            //{
-            //    ExpiresUtc = DateTimeOffset.UtcNow.AddHours(1)
-            //};
-            //HttpContext.SignInAsync(
-            //    CookieAuthenticationDefaults.AuthenticationScheme,
-            //    new ClaimsPrincipal(claimsIdentity),
-            //    authProperties);
-        }
-        private ClaimInfo ClaimInfo(string username, string applicatie)
+        private ClaimInfo ClaimInfo(string username)
         {
             var claimInfo = (from user in _authDbContext.Users
                                    join instelling in _authDbContext.Instellings on user.InstellingId equals instelling.InstellingId
                                    join account in _authDbContext.UserAccounts on user.UserId equals account.UserId
-                                   where user.Username == username && account.Rol.Code.Contains("admin") && account.Status != "Disabled" && account.Applicatie.Code == applicatie
+                                   where user.Username == username && account.Status != "Disabled"
                                    select new ClaimInfo()
                                    {
-                                       UserId = user.UserId,
                                        Username = user.Username,
                                        Fullname = user.Voornaam + " " + user.Achternaam,
                                        InstellingId = instelling.InstellingId,
                                        Instelling = instelling.Naam,
-                                       RolId = account.Rol.RolId,
-                                       Rol = account.Rol.Code
                                    }).FirstOrDefault();
             return claimInfo;
         }
@@ -217,16 +158,6 @@ namespace EPSApi.Controllers
                 }
             }
             return false;
-        }
-        private string GetAppName()
-        {
-            var app = _config.GetSection("App").Value;
-            return app;
-        }
-        private int? GetAppId()
-        {
-            var appId = _authDbContext.Applicaties.FirstOrDefault(x => x.Code == GetAppName())?.ApplicatieId;
-            return appId;
         }
     }
 }

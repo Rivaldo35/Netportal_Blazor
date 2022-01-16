@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using NetportalAPI.Data;
+using System.Collections.Generic;
 
 namespace NetportalAPI.Models
 {
@@ -9,7 +10,7 @@ namespace NetportalAPI.Models
         public string Fullname { get; set; }
         public int InstellingId { get; set; }
         public string Instelling { get; set; }
-        public int RolId { get; set; }
-        public string Rol { get; set; }
+        public List<UserRol> UserRols { get; set; }
+
     }
 }
