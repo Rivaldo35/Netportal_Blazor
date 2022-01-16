@@ -66,17 +66,7 @@ namespace EPSApi.Controllers
             }
 
         }
-        //public async Task<IActionResult> Create(string username, string password, string grant_type)
-        //{
-        //    if (await IsValidUsernameAndPassword(username, password))
-        //    {
-        //        return new ObjectResult(await GenerateToken(username, ClaimInfo()));
-        //    }
-        //    else
-        //    {
-        //        return BadRequest();
-        //    }
-        //}
+
         private dynamic GenerateToken(ClaimInfo claimInfo)
         {
             var claims = new List<Claim>
